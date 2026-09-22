@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="google" content="notranslate">
+<title>ADVERB QUEST — 5 แดนคำวิเศษณ์</title>
+<style>
+/* ============================================================
+   ADVERB QUEST — styles. System fonts only (zero CDN / zero webfonts:
+   school networks have blocked cdnjs.cloudflare.com before).
+   ============================================================ */
+:root {
+  --ink: #0B1120;
+  --ink-2: #131C33;
+  --ink-3: #1B2646;
+  --parchment: #F6EFDD;
+  --parchment-dim: #DCD3B8;
+  --gold: #C9A227;
+  --gold-bright: #E8C863;
+  --text: #EDE9DD;
+  --text-dim: #A9B0C6;
+  --good: #4CAF6D;
+  --bad: #E05C5C;
+  --radius: 14px;
+  --serif: Georgia, 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Times New Roman', serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: var(--sans);
+  background: radial-gradient(ellipse at 50% -10%, var(--ink-3), var(--ink) 60%);
+  color: var(--text);
+  -webkit-tap-highlight-color: transparent;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+#app { min-height: 100%; display: flex; flex-direction: column; }
+.screen {
+  max-width: 640px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 28px 20px 48px;
+  flex: 1;
+  animation: fadein .25s ease;
+}
+@keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .screen { animation: none; } }
+
+h1, h2, h3 { font-family: var(--serif); font-weight: 700; margin: 0 0 8px; letter-spacing: 0.2px; }
+h1 { font-size: 2.1rem; color: var(--gold-bright); }
+h2 { font-size: 1.5rem; color: var(--parchment); }
+h3 { font-size: 1.05rem; color: var(--parchment-dim); margin-top: 24px; }
+p { line-height: 1.55; color: var(--text-dim); }
+
+.btn {
+  font: inherit; font-weight: 600; border: none; border-radius: 999px;
+  padding: 13px 22px; cursor: pointer; touch-action: manipulation;
+  min-height: 48px;
+}
+.btn-primary { background: linear-gradient(180deg, var(--gold-bright), var(--gold)); color: #241a02; }
+.btn-primary:active { transform: scale(0.98); }
+.btn-secondary { background: var(--ink-3); color: var(--text); border: 1px solid #2c3a63; }
+.btn-lg { width: 100%; font-size: 1.05rem; padding: 15px 22px; margin-top: 18px; }
+.link-btn { background: none; border: none; color: var(--text-dim); text-decoration: underline; font: inherit; cursor: pointer; padding: 4px 0; }
+
+/* ---------- Intro ---------- */
+.intro-screen { text-align: center; padding-top: 8vh; }
+.eyebrow { color: var(--gold); font-size: 0.85rem; margin-bottom: 4px; }
+.intro-lead { max-width: 460px; margin: 0 auto; }
+.realm-chip-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 26px 0; }
+.realm-chip {
+  display: flex; align-items: center; gap: 6px; background: var(--ink-2);
+  border: 1px solid color-mix(in srgb, var(--rc) 45%, transparent);
+  color: var(--rc); padding: 8px 14px; border-radius: 999px; font-size: 0.9rem; font-weight: 600;
+}
+.realm-chip svg { width: 18px; height: 18px; color: var(--rc); }
+.fine-print { font-size: 0.8rem; color: var(--text-dim); opacity: 0.8; margin-top: 14px; }
+
+/* ---------- Registration ---------- */
+.reg-form { display: flex; flex-direction: column; gap: 14px; margin-top: 18px; }
+.reg-form label { display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; color: var(--text-dim); }
+.reg-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+input, select {
+  font: inherit; font-size: 16px; /* >=16px avoids iOS auto-zoom on focus */
+  background: var(--ink-2); border: 1px solid #2c3a63; color: var(--text);
+  border-radius: 10px; padding: 12px 14px; min-height: 46px;
+}
+input:focus, select:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+button:focus-visible, .word-tok:focus-visible, .chip:focus-visible, .order-slot:focus-visible {
+  outline: 2px solid var(--gold-bright); outline-offset: 2px;
+}
+
+/* ---------- Hub / realm map ---------- */
+.hub-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
+.hub-hello { color: var(--parchment); margin: 0 0 2px; font-size: 0.95rem; }
+.hub-progress { width: 120px; height: 8px; background: var(--ink-3); border-radius: 999px; overflow: hidden; }
+.hub-progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-bright)); }
+.realm-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.realm-card {
+  display: flex; align-items: center; gap: 14px; text-align: left;
+  background: linear-gradient(135deg, var(--ink-2), var(--ink-3));
+  border: 1px solid color-mix(in srgb, var(--rc) 35%, #2c3a63);
+  border-radius: var(--radius); padding: 16px; cursor: pointer; color: var(--text);
+  min-height: 64px;
+}
+.realm-card:active { transform: scale(0.99); }
+.realm-card-icon { flex: none; width: 40px; height: 40px; color: var(--rc); }
+.realm-card-icon svg { width: 100%; height: 100%; }
+.realm-card-body { display: flex; flex-direction: column; gap: 3px; flex: 1; }
+.realm-card-title { font-weight: 700; color: var(--parchment); }
+.realm-card-th { font-weight: 400; color: var(--text-dim); font-size: 0.85rem; }
+.realm-card-q { font-size: 0.82rem; color: var(--rc); }
+.realm-card-status { font-size: 0.82rem; color: var(--text-dim); display: flex; align-items: center; gap: 4px; }
+.realm-card-status svg { width: 14px; height: 14px; color: var(--good); }
+.realm-card.realm-done { border-color: var(--good); }
+.realm-card.realm-progress { border-color: var(--gold); }
+
+/* ---------- Stage / question ---------- */
+.stage-screen { --rc: var(--gold); }
+.stage-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.stage-title { display: flex; align-items: center; gap: 6px; font-weight: 700; color: var(--rc); font-size: 0.95rem; }
+.stage-title svg { width: 20px; height: 20px; color: var(--rc); }
+.stage-count { color: var(--text-dim); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+.dot-row { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 18px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: #2c3a63; }
+.dot.dot-done { background: var(--rc); }
+.dot.dot-current { background: var(--parchment); transform: scale(1.3); }
+
+.q-card {
+  background: var(--ink-2); border: 1px solid #2c3a63; border-radius: var(--radius);
+  padding: 22px 18px; margin-bottom: 16px;
+}
+.q-sentence { font-size: 1.15rem; color: var(--parchment); line-height: 1.7; margin: 0 0 18px; }
+.blank-inline {
+  display: inline-block; min-width: 64px; border-bottom: 2px dashed var(--rc);
+  color: var(--rc); text-align: center; margin: 0 2px;
+}
+.q-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.opt-btn {
+  font: inherit; font-size: 1rem; background: var(--ink-3); color: var(--text);
+  border: 1px solid #2c3a63; border-radius: 10px; padding: 14px 10px; cursor: pointer;
+  min-height: 50px;
+}
+.opt-btn:disabled { cursor: default; }
+.opt-btn.opt-correct { background: color-mix(in srgb, var(--good) 25%, var(--ink-3)); border-color: var(--good); color: #d7f5e0; }
+.opt-btn.opt-wrong { background: color-mix(in srgb, var(--bad) 25%, var(--ink-3)); border-color: var(--bad); color: #ffd9d9; }
+
+.hint-small { font-size: 0.85rem; color: var(--text-dim); margin: 0 0 14px; }
+
+.drop-zone {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 90px; min-height: 38px; padding: 4px 10px; margin: 0 2px;
+  border: 2px dashed var(--rc); border-radius: 8px; color: var(--rc); font-weight: 700;
+  vertical-align: middle;
+}
+.drop-zone.filled { border-style: solid; background: color-mix(in srgb, var(--rc) 18%, transparent); color: var(--parchment); }
+.drop-zone.drop-hover { background: color-mix(in srgb, var(--rc) 30%, transparent); }
+.blank-ph { opacity: 0.6; }
+
+.chip-tray { display: flex; flex-wrap: wrap; gap: 10px; margin: 6px 0 12px; min-height: 46px; }
+.chip {
+  background: var(--ink-3); border: 1px solid var(--rc); color: var(--parchment);
+  font-weight: 600; border-radius: 10px; padding: 10px 16px; cursor: grab;
+  user-select: none; touch-action: none; min-height: 44px; display: flex; align-items: center;
+}
+.chip:active { cursor: grabbing; }
+.chip.chip-dragging { box-shadow: 0 8px 20px rgba(0,0,0,.45); opacity: 0.95; }
+.chip.chip-used { visibility: hidden; }
+
+.order-slots { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.order-slot {
+  min-width: 64px; min-height: 44px; border: 2px dashed #3a4a78; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; padding: 6px 10px;
+  color: var(--parchment); font-weight: 600; background: var(--ink);
+}
+.order-slot:not(:empty) { border-style: solid; border-color: var(--rc); background: color-mix(in srgb, var(--rc) 16%, var(--ink)); }
+.order-slot.drop-hover { background: color-mix(in srgb, var(--rc) 30%, var(--ink)); }
+
+.q-sentence-click { display: flex; flex-wrap: wrap; gap: 6px; }
+.word-tok {
+  cursor: pointer; padding: 6px 4px; border-radius: 6px; font-size: 1.1rem; color: var(--parchment);
+  min-height: 34px; display: inline-flex; align-items: center;
+}
+.word-tok:hover { background: var(--ink-3); }
+.word-tok.tok-disabled { cursor: default; }
+.word-tok.tok-correct { background: color-mix(in srgb, var(--good) 30%, transparent); color: #d7f5e0; }
+.word-tok.tok-wrong { background: color-mix(in srgb, var(--bad) 30%, transparent); color: #ffd9d9; }
+
+.feedback { border-radius: var(--radius); padding: 16px 18px; margin-top: 4px; }
+.feedback-correct { background: color-mix(in srgb, var(--good) 16%, var(--ink-2)); border: 1px solid var(--good); }
+.feedback-wrong { background: color-mix(in srgb, var(--bad) 14%, var(--ink-2)); border: 1px solid var(--bad); }
+.feedback-headline { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--parchment); margin: 0 0 6px; }
+.feedback-headline svg { width: 20px; height: 20px; }
+.feedback-correct .feedback-headline svg { color: var(--good); }
+.feedback-wrong .feedback-headline svg { color: var(--bad); }
+.feedback-answer { margin: 0 0 6px; }
+.feedback-explain { margin: 0 0 12px; color: var(--text); }
+.feedback .btn { width: 100%; }
+
+/* ---------- Stage complete / final ---------- */
+.stagedone-screen, .final-screen { text-align: center; }
+.stagedone-badge { width: 64px; height: 64px; margin: 0 auto 8px; color: var(--rc); }
+.stagedone-score, .final-total { font-family: var(--serif); font-size: 2.6rem; color: var(--gold-bright); margin: 4px 0 18px; }
+.final-total span { font-size: 1.2rem; color: var(--text-dim); }
+.final-bars { display: flex; flex-direction: column; gap: 10px; text-align: left; margin-bottom: 8px; }
+.final-bar-row { display: grid; grid-template-columns: 110px 1fr 52px; align-items: center; gap: 10px; }
+.final-bar-label { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: var(--text-dim); }
+.final-bar-label svg { width: 18px; height: 18px; }
+.final-bar-track { height: 10px; background: var(--ink-3); border-radius: 999px; overflow: hidden; }
+.final-bar-fill { height: 100%; }
+.final-bar-score { text-align: right; font-size: 0.85rem; color: var(--text-dim); }
+
+.miss-list { list-style: none; margin: 10px 0 20px; padding: 0; display: flex; flex-direction: column; gap: 10px; text-align: left; }
+.miss-list li {
+  background: var(--ink-2); border: 1px solid #2c3a63; border-radius: 10px; padding: 12px 14px;
+  display: flex; flex-direction: column; gap: 4px; font-size: 0.9rem;
+}
+.miss-sentence { color: var(--parchment); }
+.miss-answer { color: var(--good); font-weight: 600; }
+.miss-th { color: var(--text-dim); font-size: 0.85rem; }
+.miss-none { color: var(--good); text-align: center; }
+
+/* ---------- Admin ---------- */
+.adminpin-screen, .admin-screen { padding-top: 6vh; }
+.adminpin-screen form { display: flex; flex-direction: column; gap: 12px; max-width: 280px; margin: 18px auto 0; }
+.pin-error { color: var(--bad); font-size: 0.85rem; margin: -6px 0 0; }
+.admin-offline-note { background: var(--ink-2); border: 1px solid #2c3a63; border-radius: 10px; padding: 14px; font-size: 0.88rem; }
+.admin-table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 0.85rem; }
+.admin-table th, .admin-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #2c3a63; }
+.admin-table th { color: var(--gold); font-weight: 600; }
+.admin-screen { max-width: 900px; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+  .screen { padding: 20px 14px 40px; }
+  h1 { font-size: 1.7rem; }
+  .reg-row { grid-template-columns: 1fr 1fr; }
+  .reg-row label:last-child { grid-column: 1 / -1; }
+  .q-options { grid-template-columns: 1fr; }
+  .final-bar-row { grid-template-columns: 90px 1fr 44px; }
+}
+@media (min-width: 700px) {
+  .realm-grid { grid-template-columns: 1fr 1fr; }
+}
+
+</style>
+</head>
+<body translate="no" class="notranslate">
+<div id="app" translate="no" class="notranslate"></div>
+<script>
+// ADVERB QUEST — content data
+// 5 categories x 20 items = 100 items. Mechanic cycle per category: mc4, dndfill, clickfind, dndorder (repeated 5x)
+
+const CATEGORIES = [
+  { id: 'place',     th: 'สถานที่',      en: 'Place',     q: 'Where?',      qTh: 'ที่ไหน',        color: '#1FB6A8', icon: 'compass'  },
+  { id: 'manner',    th: 'ลักษณะอาการ',  en: 'Manner',    q: 'How?',        qTh: 'อย่างไร',        color: '#F2673D', icon: 'brush'    },
+  { id: 'degree',    th: 'ระดับ',        en: 'Degree',    q: 'How much?',   qTh: 'มากน้อยแค่ไหน', color: '#8B5FBF', icon: 'gauge'    },
+  { id: 'time',      th: 'เวลา',         en: 'Time',      q: 'When?',       qTh: 'เมื่อไร',        color: '#E8A33D', icon: 'hourglass'},
+  { id: 'frequency', th: 'ความถี่',      en: 'Frequency', q: 'How often?',  qTh: 'บ่อยแค่ไหน',    color: '#4CAF6D', icon: 'loop'     }
+];
+
+const ITEMS = [
+// ---------------- PLACE ----------------
+{ id:'place-01', cat:'place', mech:'mc4', sentence:"Come ___! I want to show you something.", options:["here","there","hard","soon"], answer:"here", th:"here = ที่นี่ (สถานที่ใกล้ตัวผู้พูดตอนนี้)" },
+{ id:'place-02', cat:'place', mech:'dndfill', sentence:"Look! The keys are ___, on the table.", chips:["there","here","upstairs"], answer:"there", th:"there = ที่นั่น (สถานที่ที่ไม่ใช่ตรงนี้)" },
+{ id:'place-03', cat:'place', mech:'clickfind', sentence:"I looked everywhere for my glasses.", word:"everywhere", th:"everywhere = ทุกหนทุกแห่ง" },
+{ id:'place-04', cat:'place', mech:'dndorder', orders:[["let's","go","somewhere","nice"]], hintTh:"ไปที่ไหนสักแห่งที่ดีๆ กันเถอะ", th:"somewhere = ที่ใดที่หนึ่ง (ไม่ระบุเจาะจง)" },
+{ id:'place-05', cat:'place', mech:'mc4', sentence:"You can sit ___ you like.", options:["anywhere","nowhere","outside","quickly"], answer:"anywhere", th:"anywhere = ที่ไหนก็ได้" },
+{ id:'place-06', cat:'place', mech:'dndfill', sentence:"After the storm, there was ___ to hide.", chips:["nowhere","anywhere","abroad"], answer:"nowhere", th:"nowhere = ไม่มีที่ไหนเลย" },
+{ id:'place-07', cat:'place', mech:'clickfind', sentence:"The children are playing outside in the garden.", word:"outside", th:"outside = ข้างนอก" },
+{ id:'place-08', cat:'place', mech:'dndorder', orders:[["it's","raining","so","stay","inside"]], hintTh:"ฝนกำลังตก ดังนั้นจงอยู่ข้างในนะ", th:"inside = ข้างใน" },
+{ id:'place-09', cat:'place', mech:'mc4', sentence:"My bedroom is ___.", options:["upstairs","downstairs","abroad","always"], answer:"upstairs", th:"upstairs = ชั้นบน" },
+{ id:'place-10', cat:'place', mech:'dndfill', sentence:"Breakfast is ready ___.", chips:["downstairs","upstairs","home"], answer:"downstairs", th:"downstairs = ชั้นล่าง" },
+{ id:'place-11', cat:'place', mech:'clickfind', sentence:"My sister wants to study abroad next year.", word:"abroad", th:"abroad = ต่างประเทศ" },
+{ id:'place-12', cat:'place', mech:'dndorder', orders:[["the","cat","ran","away"]], hintTh:"แมววิ่งหนีไป", th:"away = จากไป, ออกไป" },
+{ id:'place-13', cat:'place', mech:'mc4', sentence:"There is a good restaurant ___.", options:["nearby","abroad","everywhere","carefully"], answer:"nearby", th:"nearby = อยู่ใกล้ๆ" },
+{ id:'place-14', cat:'place', mech:'dndfill', sentence:"Please see the notes ___ for more details.", chips:["above","below","nearby"], answer:"above", th:"above = ข้างบน (ในข้อความ หมายถึงที่กล่าวไว้ก่อนหน้า)" },
+{ id:'place-15', cat:'place', mech:'clickfind', sentence:"Please write your name below.", word:"below", th:"below = ข้างล่าง" },
+{ id:'place-16', cat:'place', mech:'dndorder', orders:[["we","walked","around","for","an","hour"]], hintTh:"เราเดินเล่นไปรอบๆ ประมาณหนึ่งชั่วโมง", th:"around = ไปรอบๆ, แถวๆ นี้" },
+{ id:'place-17', cat:'place', mech:'mc4', sentence:"I stayed ___ all weekend.", options:["home","abroad","downstairs","rarely"], answer:"home", th:"home = ที่บ้าน (ใช้โดยไม่ต้องมี at)" },
+{ id:'place-18', cat:'place', mech:'dndfill', sentence:"He went out but came ___ quickly.", chips:["back","away","around"], answer:"back", th:"back = กลับมา" },
+{ id:'place-19', cat:'place', mech:'clickfind', sentence:"It's cold, so we stayed indoors today.", word:"indoors", th:"indoors = ในอาคาร, ข้างใน" },
+{ id:'place-20', cat:'place', mech:'dndorder', orders:[["they","like","to","eat","outdoors"]], hintTh:"พวกเขาชอบกินอาหารกลางแจ้ง", th:"outdoors = กลางแจ้ง" },
+
+// ---------------- MANNER ----------------
+{ id:'manner-01', cat:'manner', mech:'mc4', sentence:"She finished her homework ___.", options:["quickly","slowly","carefully","always"], answer:"quickly", th:"quickly = อย่างรวดเร็ว" },
+{ id:'manner-02', cat:'manner', mech:'dndfill', sentence:"Grandpa walks ___ because his legs are weak.", chips:["slowly","quickly","quietly"], answer:"slowly", th:"slowly = อย่างช้าๆ" },
+{ id:'manner-03', cat:'manner', mech:'clickfind', sentence:"Please carry the eggs carefully.", word:"carefully", th:"carefully = อย่างระมัดระวัง" },
+{ id:'manner-04', cat:'manner', mech:'dndorder', orders:[["the","children","played","happily"]], hintTh:"เด็กๆ เล่นกันอย่างมีความสุข", th:"happily = อย่างมีความสุข" },
+{ id:'manner-05', cat:'manner', mech:'mc4', sentence:"He looked at the broken toy and sighed ___.", options:["sadly","happily","loudly","here"], answer:"sadly", th:"sadly = อย่างเศร้าใจ" },
+{ id:'manner-06', cat:'manner', mech:'dndfill', sentence:"The baby is sleeping, so please talk ___.", chips:["quietly","loudly","quickly"], answer:"quietly", th:"quietly = อย่างเงียบๆ" },
+{ id:'manner-07', cat:'manner', mech:'clickfind', sentence:"The fans cheered loudly for their team.", word:"loudly", th:"loudly = อย่างดัง" },
+{ id:'manner-08', cat:'manner', mech:'dndorder', orders:[["my","brother","cooks","very","well"]], hintTh:"พี่ชายของฉันทำอาหารเก่งมาก", th:"well = ดี, เก่ง (รูปกริยาวิเศษณ์ของ good)" },
+{ id:'manner-09', cat:'manner', mech:'mc4', sentence:"The team played ___ and lost the game.", options:["badly","well","gently","soon"], answer:"badly", th:"badly = อย่างแย่" },
+{ id:'manner-10', cat:'manner', mech:'dndfill', sentence:"You must study ___ to pass the exam.", chips:["hard","well","fast"], answer:"hard", th:"hard = อย่างหนัก, ขยัน (ไม่ใช่ hardly)" },
+{ id:'manner-11', cat:'manner', mech:'clickfind', sentence:"The cheetah runs fast across the field.", word:"fast", th:"fast = อย่างรวดเร็ว (รูปเดียวกับคำคุณศัพท์)" },
+{ id:'manner-12', cat:'manner', mech:'dndorder', orders:[["she","solved","the","puzzle","easily"]], hintTh:"เธอแก้ปริศนาได้อย่างง่ายดาย", th:"easily = อย่างง่ายดาย" },
+{ id:'manner-13', cat:'manner', mech:'mc4', sentence:"The choir sang ___ at the concert.", options:["beautifully","badly","hard","never"], answer:"beautifully", th:"beautifully = อย่างไพเราะ/สวยงาม" },
+{ id:'manner-14', cat:'manner', mech:'dndfill', sentence:"He slammed the door ___ after the argument.", chips:["angrily","calmly","politely"], answer:"angrily", th:"angrily = อย่างโกรธ" },
+{ id:'manner-15', cat:'manner', mech:'clickfind', sentence:"The nurse patiently explained the medicine to the patient.", word:"patiently", th:"patiently = อย่างอดทน" },
+{ id:'manner-16', cat:'manner', mech:'dndorder', orders:[["the","student","waited","nervously","outside"]], hintTh:"นักเรียนรอคอยอย่างประหม่าอยู่ข้างนอก", th:"nervously = อย่างประหม่า/กังวล" },
+{ id:'manner-17', cat:'manner', mech:'mc4', sentence:"She answered the difficult question ___.", options:["calmly","nervously","loudly","there"], answer:"calmly", th:"calmly = อย่างใจเย็น" },
+{ id:'manner-18', cat:'manner', mech:'dndfill', sentence:"Please ask ___ if you need help.", chips:["politely","angrily","sadly"], answer:"politely", th:"politely = อย่างสุภาพ" },
+{ id:'manner-19', cat:'manner', mech:'clickfind', sentence:"He honestly admitted his mistake to the teacher.", word:"honestly", th:"honestly = อย่างซื่อสัตย์/ตรงไปตรงมา" },
+{ id:'manner-20', cat:'manner', mech:'dndorder', orders:[["she","held","the","kitten","gently"]], hintTh:"เธออุ้มลูกแมวอย่างนุ่มนวล", th:"gently = อย่างนุ่มนวล" },
+
+// ---------------- DEGREE ----------------
+{ id:'degree-01', cat:'degree', mech:'mc4', sentence:"It is ___ cold outside today.", options:["very","too","quite","here"], answer:"very", th:"very = มาก (เน้นระดับ ไม่ได้บอกว่าเกินไป)" },
+{ id:'degree-02', cat:'degree', mech:'dndfill', sentence:"This coffee is ___ hot to drink.", chips:["too","very","quite"], answer:"too", th:"too = มากเกินไป (จนทำอะไรไม่ได้)" },
+{ id:'degree-03', cat:'degree', mech:'clickfind', sentence:"The movie was quite interesting.", word:"quite", th:"quite = ค่อนข้าง" },
+{ id:'degree-04', cat:'degree', mech:'dndorder', orders:[["this","book","is","rather","difficult"]], hintTh:"หนังสือเล่มนี้ค่อนข้างยาก", th:"rather = ค่อนข้าง (มักใช้กับสิ่งที่ไม่ชอบ/ไม่คาดคิด)" },
+{ id:'degree-05', cat:'degree', mech:'mc4', sentence:"I am ___ finished with my project.", options:["almost","completely","rather","quickly"], answer:"almost", th:"almost = เกือบจะ" },
+{ id:'degree-06', cat:'degree', mech:'dndfill', sentence:"The exam was ___ difficult this year.", chips:["extremely","slightly","rather"], answer:"extremely", th:"extremely = อย่างยิ่ง, มากๆ" },
+{ id:'degree-07', cat:'degree', mech:'clickfind', sentence:"I completely forgot about the meeting.", word:"completely", th:"completely = อย่างสิ้นเชิง" },
+{ id:'degree-08', cat:'degree', mech:'dndorder', orders:[["the","view","was","absolutely","amazing"]], hintTh:"วิวสวยงามอย่างแท้จริง", th:"absolutely = อย่างแท้จริง, เต็มที่ (เน้นคำคุณศัพท์ที่มีความหมายสุดขั้ว)" },
+{ id:'degree-09', cat:'degree', mech:'mc4', sentence:"This game is ___ fun to play.", options:["really","hardly","somewhat","there"], answer:"really", th:"really = จริงๆ, มาก" },
+{ id:'degree-10', cat:'degree', mech:'dndfill', sentence:"I am ___ tired that I can barely walk.", chips:["so","too","very"], answer:"so", th:"so = ...มาก...จนกระทั่ง (มักใช้กับ that)" },
+{ id:'degree-11', cat:'degree', mech:'clickfind', sentence:"This box isn't big enough for all the books.", word:"enough", th:"enough = พอเพียง (วางหลังคำคุณศัพท์)" },
+{ id:'degree-12', cat:'degree', mech:'dndorder', orders:[["the","test","was","fairly","easy"]], hintTh:"ข้อสอบค่อนข้างง่าย", th:"fairly = ค่อนข้าง (โทนเป็นกลางกว่า rather)" },
+{ id:'degree-13', cat:'degree', mech:'mc4', sentence:"I ___ agree with your idea.", options:["totally","hardly","barely","outside"], answer:"totally", th:"totally = อย่างสิ้นเชิง, เห็นด้วยเต็มที่" },
+{ id:'degree-14', cat:'degree', mech:'dndfill', sentence:"It was so dark that I could ___ see.", chips:["hardly","almost","quite"], answer:"hardly", th:"hardly = แทบจะไม่..." },
+{ id:'degree-15', cat:'degree', mech:'clickfind', sentence:"We barely made it to the bus on time.", word:"barely", th:"barely = แทบจะไม่ทัน, เกือบไม่..." },
+{ id:'degree-16', cat:'degree', mech:'dndorder', orders:[["the","soup","is","slightly","salty"]], hintTh:"ซุปมีรสเค็มนิดหน่อย", th:"slightly = เล็กน้อย" },
+{ id:'degree-17', cat:'degree', mech:'mc4', sentence:"The magician's trick was ___ clever.", options:["incredibly","hardly","barely","yesterday"], answer:"incredibly", th:"incredibly = อย่างเหลือเชื่อ" },
+{ id:'degree-18', cat:'degree', mech:'dndfill', sentence:"I love fruit, ___ mangoes.", chips:["especially","really","quite"], answer:"especially", th:"especially = โดยเฉพาะอย่างยิ่ง" },
+{ id:'degree-19', cat:'degree', mech:'clickfind', sentence:"This lesson was particularly useful for the exam.", word:"particularly", th:"particularly = โดยเฉพาะ" },
+{ id:'degree-20', cat:'degree', mech:'dndorder', orders:[["the","results","were","somewhat","surprising"]], hintTh:"ผลลัพธ์ค่อนข้างน่าประหลาดใจ", th:"somewhat = ค่อนข้าง, ในระดับหนึ่ง" },
+
+// ---------------- TIME ----------------
+{ id:'time-01', cat:'time', mech:'mc4', sentence:"I have to go ___; the bus is leaving.", options:["now","then","soon","quietly"], answer:"now", th:"now = ตอนนี้" },
+{ id:'time-02', cat:'time', mech:'dndfill', sentence:"We had dinner and ___ watched a movie.", chips:["then","now","soon"], answer:"then", th:"then = หลังจากนั้น, ตอนนั้น" },
+{ id:'time-03', cat:'time', mech:'clickfind', sentence:"The library is closed today.", word:"today", th:"today = วันนี้" },
+{ id:'time-04', cat:'time', mech:'dndorder', orders:[["i","met","my","friend","yesterday"],["yesterday","i","met","my","friend"]], hintTh:"ฉันเจอเพื่อนเมื่อวานนี้", th:"yesterday = เมื่อวานนี้" },
+{ id:'time-05', cat:'time', mech:'mc4', sentence:"The trip is ___, so pack your bag tonight.", options:["tomorrow","yesterday","today","very"], answer:"tomorrow", th:"tomorrow = พรุ่งนี้" },
+{ id:'time-06', cat:'time', mech:'dndfill', sentence:"The bell will ring ___.", chips:["soon","already","still"], answer:"soon", th:"soon = เร็วๆ นี้" },
+{ id:'time-07', cat:'time', mech:'clickfind', sentence:"I'll finish this report later.", word:"later", th:"later = ทีหลัง" },
+{ id:'time-08', cat:'time', mech:'dndorder', orders:[["she","has","already","finished","her","homework"],["she","has","finished","her","homework","already"]], hintTh:"เธอทำการบ้านเสร็จแล้ว", th:"already = แล้ว (เกิดขึ้นก่อนที่คาดไว้)" },
+{ id:'time-09', cat:'time', mech:'mc4', sentence:"I haven't seen that movie ___.", options:["yet","already","still","always"], answer:"yet", th:"yet = ยัง...(ไม่)... (ใช้ในประโยคปฏิเสธ/คำถาม)" },
+{ id:'time-10', cat:'time', mech:'dndfill', sentence:"He ___ lives in the same house he grew up in.", chips:["still","yet","already"], answer:"still", th:"still = ยังคง...อยู่" },
+{ id:'time-11', cat:'time', mech:'clickfind', sentence:"We recently moved to a new apartment.", word:"recently", th:"recently = เมื่อเร็วๆ นี้" },
+{ id:'time-12', cat:'time', mech:'dndorder', orders:[["please","call","me","immediately"],["please","immediately","call","me"]], hintTh:"กรุณาโทรหาฉันทันที", th:"immediately = ทันที" },
+{ id:'time-13', cat:'time', mech:'mc4', sentence:"After hours of waiting, the bus ___ arrived.", options:["finally","still","yet","quickly"], answer:"finally", th:"finally = ในที่สุด" },
+{ id:'time-14', cat:'time', mech:'dndfill', sentence:"It took years, but he ___ became a doctor.", chips:["eventually","soon","already"], answer:"eventually", th:"eventually = ในที่สุด (หลังจากใช้เวลานาน)" },
+{ id:'time-15', cat:'time', mech:'clickfind', sentence:"I haven't seen him lately.", word:"lately", th:"lately = ช่วงหลังๆ นี้" },
+{ id:'time-16', cat:'time', mech:'dndorder', orders:[["i","have","read","this","book","before"]], hintTh:"ฉันเคยอ่านหนังสือเล่มนี้มาก่อน", th:"before = มาก่อน, เคย...มาแล้ว" },
+{ id:'time-17', cat:'time', mech:'mc4', sentence:"We watched the film and had ice cream ___.", options:["afterward","before","still","loudly"], answer:"afterward", th:"afterward = หลังจากนั้น" },
+{ id:'time-18', cat:'time', mech:'dndfill', sentence:"Turn on the TV, the big match starts ___!", chips:["tonight","yesterday","later"], answer:"tonight", th:"tonight = คืนนี้" },
+{ id:'time-19', cat:'time', mech:'clickfind', sentence:"Nowadays, most students use tablets in class.", word:"nowadays", th:"nowadays = ทุกวันนี้" },
+{ id:'time-20', cat:'time', mech:'dndorder', orders:[["we","woke","up","early","today"]], hintTh:"วันนี้เราตื่นแต่เช้า", th:"early = แต่เช้า, ก่อนเวลา" },
+
+// ---------------- FREQUENCY ----------------
+{ id:'frequency-01', cat:'frequency', mech:'mc4', sentence:"She ___ arrives at school on time.", options:["always","never","sometimes","quickly"], answer:"always", th:"always = เสมอ, ทุกครั้ง" },
+{ id:'frequency-02', cat:'frequency', mech:'dndfill', sentence:"I ___ have cereal for breakfast.", chips:["usually","always","rarely"], answer:"usually", th:"usually = โดยปกติ" },
+{ id:'frequency-03', cat:'frequency', mech:'clickfind', sentence:"We often go to the beach in summer.", word:"often", th:"often = บ่อยๆ" },
+{ id:'frequency-04', cat:'frequency', mech:'dndorder', orders:[["sometimes","i","forget","my","keys"],["i","forget","my","keys","sometimes"]], hintTh:"บางครั้งฉันก็ลืมกุญแจ", th:"sometimes = บางครั้ง" },
+{ id:'frequency-05', cat:'frequency', mech:'mc4', sentence:"He ___ eats fast food, but not very often.", options:["occasionally","always","usually","there"], answer:"occasionally", th:"occasionally = เป็นครั้งคราว" },
+{ id:'frequency-06', cat:'frequency', mech:'dndfill', sentence:"My grandmother ___ uses a smartphone.", chips:["rarely","always","often"], answer:"rarely", th:"rarely = แทบไม่ค่อย, ไม่ค่อยจะ" },
+{ id:'frequency-07', cat:'frequency', mech:'clickfind', sentence:"He seldom complains about his job.", word:"seldom", th:"seldom = แทบจะไม่ (ทางการกว่า rarely)" },
+{ id:'frequency-08', cat:'frequency', mech:'dndorder', orders:[["they","have","never","been","abroad"],["never","have","they","been","abroad"]], hintTh:"พวกเขาไม่เคยไปต่างประเทศเลย", th:"never = ไม่เคยเลย" },
+{ id:'frequency-09', cat:'frequency', mech:'mc4', sentence:"The bus service is ___ delayed in winter.", options:["frequently","rarely","never","carefully"], answer:"frequently", th:"frequently = บ่อยครั้ง" },
+{ id:'frequency-10', cat:'frequency', mech:'dndfill', sentence:"You should exercise ___ to stay healthy.", chips:["regularly","rarely","never"], answer:"regularly", th:"regularly = อย่างสม่ำเสมอ" },
+{ id:'frequency-11', cat:'frequency', mech:'clickfind', sentence:"I normally wake up at six o'clock.", word:"normally", th:"normally = โดยปกติ" },
+{ id:'frequency-12', cat:'frequency', mech:'dndorder', orders:[["the","weather","here","is","generally","mild"]], hintTh:"โดยทั่วไปแล้วอากาศที่นี่ไม่ร้อนไม่หนาว", th:"generally = โดยทั่วไป" },
+{ id:'frequency-13', cat:'frequency', mech:'mc4', sentence:"My little brother is ___ asking questions.", options:["constantly","rarely","seldom","soon"], answer:"constantly", th:"constantly = ตลอดเวลา" },
+{ id:'frequency-14', cat:'frequency', mech:'dndfill', sentence:"The machine ___ makes a strange noise.", chips:["continually","rarely","seldom"], answer:"continually", th:"continually = ซ้ำๆ อย่างต่อเนื่อง" },
+{ id:'frequency-15', cat:'frequency', mech:'clickfind', sentence:"Reading daily can improve your vocabulary.", word:"daily", th:"daily = ทุกวัน" },
+{ id:'frequency-16', cat:'frequency', mech:'dndorder', orders:[["our","class","meets","for","extra","practice","weekly"]], hintTh:"ห้องเรียนของเรามีคาบฝึกซ้อมพิเศษทุกสัปดาห์", th:"weekly = ทุกสัปดาห์" },
+{ id:'frequency-17', cat:'frequency', mech:'mc4', sentence:"The magazine is published ___.", options:["monthly","daily","hourly","gently"], answer:"monthly", th:"monthly = ทุกเดือน" },
+{ id:'frequency-18', cat:'frequency', mech:'dndfill', sentence:"The school checks the fire alarms ___.", chips:["yearly","monthly","daily"], answer:"yearly", th:"yearly = ทุกปี" },
+{ id:'frequency-19', cat:'frequency', mech:'clickfind', sentence:"The nurse checked his temperature hourly.", word:"hourly", th:"hourly = ทุกชั่วโมง" },
+{ id:'frequency-20', cat:'frequency', mech:'dndorder', orders:[["the","hotel","holds","a","music","show","nightly"]], hintTh:"โรงแรมจัดการแสดงดนตรีทุกคืน", th:"nightly = ทุกคืน" }
+];
+
+if (typeof module !== 'undefined') { module.exports = { CATEGORIES, ITEMS }; }
+
+</script>
+<script>
+/* ============================================================
+   ADVERB QUEST — Game Engine
+   5 realms (Place / Manner / Degree / Time / Frequency) x 20 items
+   Mechanics: mc4, dndfill (drag/tap), clickfind, dndorder (drag/tap)
+   Zero CDN dependencies. Works fully offline; GAS backend optional.
+   ============================================================ */
+(function (global) {
+'use strict';
+
+/* ---------------- Config ---------------- */
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbzlyBpHjKLluFAYyjQGp64zrdZeU60YXbwrAynaev9Q8a9idvRaqvx5haG0tZqlKf7x/exec'; // paste your deployed Google Apps Script Web App URL here; leave blank = offline/practice mode
+var ADMIN_PIN = '7846';
+var STORAGE_KEY = 'adverbquest_progress_v1';
+var CAT_ORDER = ['place', 'manner', 'degree', 'time', 'frequency'];
+
+/* ---------------- Seeded RNG (mulberry32 + string hash) ---------------- */
+function hashSeed(str) {
+  var h = 1779033703 ^ str.length;
+  for (var i = 0; i < str.length; i++) {
+    h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
+    h = (h << 13) | (h >>> 19);
+  }
+  h = Math.imul(h ^ (h >>> 16), 2246822507);
+  h = Math.imul(h ^ (h >>> 13), 3266489909);
+  h ^= h >>> 16;
+  return h >>> 0;
+}
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    var t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function makeRng(seedStr) { return mulberry32(hashSeed(String(seedStr))); }
+function seededShuffle(arr, rng) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(rng() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
+/* ---------------- Content lookup ---------------- */
+function itemsByCat(cat) { return ITEMS.filter(function (it) { return it.cat === cat; }); }
+function itemById(id) { return ITEMS.filter(function (it) { return it.id === id; })[0]; }
+function catInfo(cat) { return CATEGORIES.filter(function (c) { return c.id === cat; })[0]; }
+
+/* Deterministic per-student session: item order per stage + shuffled options/chips/word-order.
+   Not persisted — regenerated identically from the same student key every time. */
+function buildSession(studentKey) {
+  var rng = makeRng(studentKey);
+  var session = { order: {}, display: {} };
+  CAT_ORDER.forEach(function (cat) {
+    var items = seededShuffle(itemsByCat(cat), rng);
+    session.order[cat] = items.map(function (it) { return it.id; });
+    items.forEach(function (it) {
+      if (it.mech === 'mc4') session.display[it.id] = seededShuffle(it.options, rng);
+      else if (it.mech === 'dndfill') session.display[it.id] = seededShuffle(it.chips, rng);
+      else if (it.mech === 'dndorder') session.display[it.id] = seededShuffle(it.orders[0], rng);
+    });
+  });
+  return session;
+}
+
+/* ---------------- Grading helpers ---------------- */
+function normWord(w) { return String(w).toLowerCase().replace(/[.,!?;:'"]/g, '').trim(); }
+function gradeMC4(item, chosen) { return normWord(chosen) === normWord(item.answer); }
+function gradeDndFill(item, chosen) { return normWord(chosen) === normWord(item.answer); }
+function gradeClickFind(item, chosenIndex, tokens) {
+  var clean = tokens.map(normWord);
+  var targetIdx = clean.indexOf(normWord(item.word));
+  return targetIdx !== -1 && chosenIndex === targetIdx;
+}
+function findClickTargetIndex(item, tokens) {
+  var clean = tokens.map(normWord);
+  return clean.indexOf(normWord(item.word));
+}
+function gradeDndOrder(item, submitted) {
+  var subNorm = submitted.map(normWord).join('\u0001');
+  return item.orders.some(function (seq) { return seq.map(normWord).join('\u0001') === subNorm; });
+}
+
+/* ---------------- Persistence ---------------- */
+function loadProgress() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) { return null; }
+}
+function saveProgress(p) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); } catch (e) {}
+}
+function clearProgress() {
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+}
+function freshProgress(student) {
+  var stages = {};
+  CAT_ORDER.forEach(function (cat) { stages[cat] = { done: false, score: 0, answers: {} }; });
+  return { student: student, stages: stages, violations: 0, startedAt: Date.now(), updatedAt: Date.now() };
+}
+function studentKeyOf(s) { return [s.name, s.surname, s.grade, s.room, s.number].join('|'); }
+
+/* ---------------- Backend (GAS) — best-effort, graceful offline fallback ---------------- */
+function backendEnabled() { return !!GAS_URL; }
+function gasCall(action, payload) {
+  if (!backendEnabled()) return Promise.resolve({ ok: false, offline: true });
+  var body = Object.assign({ action: action }, payload || {});
+  return fetch(GAS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(body)
+  }).then(function (res) { return res.json(); })
+    .catch(function (e) { return { ok: false, error: String(e) }; });
+}
+
+/* ---------------- Web Audio SFX (no audio files, no CDN) ---------------- */
+var audioCtx = null;
+function ensureAudio() {
+  if (!audioCtx) {
+    try { audioCtx = new (global.AudioContext || global.webkitAudioContext)(); } catch (e) {}
+  }
+  return audioCtx;
+}
+function tone(freq, dur, type, gainVal) {
+  var ctx = ensureAudio();
+  if (!ctx) return;
+  if (ctx.state === 'suspended') { try { ctx.resume(); } catch (e) {} }
+  var osc = ctx.createOscillator();
+  var gain = ctx.createGain();
+  osc.type = type || 'sine';
+  osc.frequency.value = freq;
+  var g = gainVal || 0.08;
+  osc.connect(gain); gain.connect(ctx.destination);
+  var now = ctx.currentTime;
+  gain.gain.setValueAtTime(g, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
+  osc.start(now); osc.stop(now + dur);
+}
+function sfxCorrect() { tone(880, 0.12, 'sine', 0.09); setTimeout(function () { tone(1175, 0.15, 'sine', 0.09); }, 90); }
+function sfxWrong() { tone(220, 0.25, 'sawtooth', 0.05); }
+function sfxComplete() { [660, 880, 1100, 1320].forEach(function (f, i) { setTimeout(function () { tone(f, 0.18, 'sine', 0.08); }, i * 110); }); }
+function sfxTap() { tone(500, 0.045, 'square', 0.025); }
+
+/* ---------------- Anti-cheat ---------------- */
+var ViolationTracker = {
+  count: 0,
+  active: false,
+  onViolation: null,
+  start: function () { this.active = true; },
+  stop: function () { this.active = false; },
+  reset: function (startCount) { this.count = startCount || 0; },
+  log: function (reason) {
+    if (!this.active) return;
+    this.count++;
+    if (this.onViolation) this.onViolation(reason, this.count);
+  }
+};
+function setupAntiCheat() {
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) ViolationTracker.log('tab-switch');
+  });
+  var root = document.getElementById('app');
+  if (root && 'MutationObserver' in global) {
+    var mo = new MutationObserver(function (mutations) {
+      for (var i = 0; i < mutations.length; i++) {
+        if (mutations[i].type === 'characterData') { ViolationTracker.log('translate-or-edit'); break; }
+      }
+    });
+    mo.observe(root, { characterData: true, subtree: true, characterDataOldValue: false });
+  }
+}
+
+/* ---------------- Escaping ---------------- */
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
+/* ---------------- Pointer-based drag & drop (mouse + touch + pen; iPad-safe) ----------------
+   Supports both real dragging AND tap-to-place (tap a chip -> fills next open target). */
+function attachDraggable(chipEl, opts) {
+  // opts: { onDropTarget(targetEl), findTargetAt(x,y), onTap() }
+  var startX, startY, moved, dragging, ghost;
+  var THRESH = 8;
+
+  chipEl.style.touchAction = 'none';
+
+  chipEl.addEventListener('pointerdown', function (e) {
+    if (chipEl.classList.contains('chip-used') || chipEl.classList.contains('chip-disabled')) return;
+    startX = e.clientX; startY = e.clientY; moved = false; dragging = false;
+    var rect = chipEl.getBoundingClientRect();
+    var offX = e.clientX - rect.left, offY = e.clientY - rect.top;
+
+    function onMove(ev) {
+      var dx = ev.clientX - startX, dy = ev.clientY - startY;
+      if (!dragging && (Math.abs(dx) > THRESH || Math.abs(dy) > THRESH)) {
+        dragging = true;
+        chipEl.classList.add('chip-dragging');
+        chipEl.style.position = 'fixed';
+        chipEl.style.zIndex = '999';
+        chipEl.style.width = rect.width + 'px';
+        document.body.appendChild(chipEl);
+      }
+      if (dragging) {
+        moved = true;
+        chipEl.style.left = (ev.clientX - offX) + 'px';
+        chipEl.style.top = (ev.clientY - offY) + 'px';
+        chipEl.style.pointerEvents = 'none';
+        var under = document.elementFromPoint(ev.clientX, ev.clientY);
+        chipEl.style.pointerEvents = '';
+        var target = opts.findTargetAt(under);
+        document.querySelectorAll('.drop-hover').forEach(function (el) { el.classList.remove('drop-hover'); });
+        if (target) target.classList.add('drop-hover');
+      }
+    }
+    function onUp(ev) {
+      document.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerup', onUp);
+      document.querySelectorAll('.drop-hover').forEach(function (el) { el.classList.remove('drop-hover'); });
+      if (dragging) {
+        chipEl.classList.remove('chip-dragging');
+        chipEl.style.pointerEvents = 'none';
+        var under = document.elementFromPoint(ev.clientX, ev.clientY);
+        chipEl.style.pointerEvents = '';
+        var target = opts.findTargetAt(under);
+        chipEl.style.position = ''; chipEl.style.left = ''; chipEl.style.top = ''; chipEl.style.zIndex = ''; chipEl.style.width = '';
+        if (target) opts.onDropTarget(target, chipEl);
+        else if (opts.onReturn) opts.onReturn(chipEl);
+      } else if (!moved) {
+        if (opts.onTap) opts.onTap(chipEl);
+      }
+    }
+    document.addEventListener('pointermove', onMove);
+    document.addEventListener('pointerup', onUp);
+    e.preventDefault();
+  }, { passive: false });
+}
+
+/* Expose */
+var AdverbQuestAPI = {
+  CAT_ORDER: CAT_ORDER,
+  makeRng: makeRng, seededShuffle: seededShuffle,
+  itemsByCat: itemsByCat, itemById: itemById, catInfo: catInfo,
+  buildSession: buildSession,
+  normWord: normWord, gradeMC4: gradeMC4, gradeDndFill: gradeDndFill,
+  gradeClickFind: gradeClickFind, findClickTargetIndex: findClickTargetIndex, gradeDndOrder: gradeDndOrder,
+  loadProgress: loadProgress, saveProgress: saveProgress, clearProgress: clearProgress,
+  freshProgress: freshProgress, studentKeyOf: studentKeyOf,
+  backendEnabled: backendEnabled, gasCall: gasCall,
+  sfxCorrect: sfxCorrect, sfxWrong: sfxWrong, sfxComplete: sfxComplete, sfxTap: sfxTap,
+  ViolationTracker: ViolationTracker, setupAntiCheat: setupAntiCheat,
+  esc: esc, attachDraggable: attachDraggable,
+  getGasUrl: function(){ return GAS_URL; }, getAdminPin: function(){ return ADMIN_PIN; }
+};
+global.AdverbQuest = AdverbQuestAPI;
+if (typeof module !== 'undefined') { module.exports = AdverbQuestAPI; }
+
+})(typeof window !== 'undefined' ? window : this);
+
+</script>
+<script>
+/* ============================================================
+   ADVERB QUEST — UI layer (screens, mechanics, controller)
+   Depends on: data.js (ITEMS, CATEGORIES) + app.js (window.AdverbQuest)
+   ============================================================ */
+(function () {
+'use strict';
+var AQ = window.AdverbQuest;
+var esc = AQ.esc;
+
+/* ---------------- Icons (basic shapes only — no arc/bezier path data) ---------------- */
+function icon(name) {
+  var body = {
+    compass: '<circle cx="24" cy="24" r="18" fill="none" stroke="currentColor" stroke-width="2.5"/>' +
+      '<line x1="24" y1="4" x2="24" y2="10" stroke="currentColor" stroke-width="2.5"/>' +
+      '<line x1="24" y1="38" x2="24" y2="44" stroke="currentColor" stroke-width="2.5"/>' +
+      '<line x1="4" y1="24" x2="10" y2="24" stroke="currentColor" stroke-width="2.5"/>' +
+      '<line x1="38" y1="24" x2="44" y2="24" stroke="currentColor" stroke-width="2.5"/>' +
+      '<polygon points="24,14 29,24 24,34 19,24" fill="currentColor"/>',
+    brush: '<g transform="rotate(45 24 24)">' +
+      '<rect x="21" y="6" width="6" height="20" rx="3" fill="currentColor"/>' +
+      '<polygon points="18,26 30,26 24,40" fill="currentColor"/></g>',
+    gauge: '<rect x="8" y="28" width="8" height="14" rx="2" fill="currentColor"/>' +
+      '<rect x="20" y="18" width="8" height="24" rx="2" fill="currentColor"/>' +
+      '<rect x="32" y="8" width="8" height="34" rx="2" fill="currentColor"/>',
+    hourglass: '<polygon points="10,8 38,8 24,24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>' +
+      '<polygon points="10,40 38,40 24,24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>' +
+      '<line x1="8" y1="8" x2="40" y2="8" stroke="currentColor" stroke-width="2.5"/>' +
+      '<line x1="8" y1="40" x2="40" y2="40" stroke="currentColor" stroke-width="2.5"/>',
+    loop: '<circle cx="24" cy="24" r="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="4 5"/>' +
+      '<circle cx="24" cy="8" r="4" fill="currentColor"/>' +
+      '<circle cx="37" cy="32" r="4" fill="currentColor"/>' +
+      '<circle cx="11" cy="32" r="4" fill="currentColor"/>',
+    check: '<polyline points="6,25 18,37 42,11" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>',
+    cross: '<line x1="12" y1="12" x2="36" y2="36" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><line x1="36" y1="12" x2="12" y2="36" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>'
+  }[name] || '';
+  return '<svg viewBox="0 0 48 48" class="realm-icon" aria-hidden="true">' + body + '</svg>';
+}
+
+/* ---------------- Controller state ---------------- */
+var S = {
+  screen: 'intro',       // intro | register | hub | stage | stagedone | final | adminpin | admindash
+  cat: null,             // current realm id while in 'stage'/'stagedone'
+  idx: 0,                // index within session.order[cat]
+  answered: false,       // has current item been graded already (awaiting Next)
+  lastCorrect: null,
+  session: null,
+  progress: null,
+  dndOrderState: null,   // { slots:[chipIdOrNull...] } for the active dndorder item — slots store
+                         // chip IDs (not word text), so a repeated word can never be misattributed
+  adminPinError: false,
+  adminData: null
+};
+
+function totalAnswered() {
+  if (!S.progress) return 0;
+  var n = 0;
+  AQ.CAT_ORDER.forEach(function (c) { n += Object.keys(S.progress.stages[c].answers).length; });
+  return n;
+}
+function totalScore() {
+  if (!S.progress) return 0;
+  var n = 0;
+  AQ.CAT_ORDER.forEach(function (c) { n += S.progress.stages[c].score; });
+  return n;
+}
+function allDone() {
+  if (!S.progress) return false;
+  return AQ.CAT_ORDER.every(function (c) { return S.progress.stages[c].done; });
+}
+function nextUnansweredIdx(cat) {
+  var order = S.session.order[cat];
+  var answers = S.progress.stages[cat].answers;
+  for (var i = 0; i < order.length; i++) if (!(order[i] in answers)) return i;
+  return order.length; // all answered
+}
+
+/* ---------------- Screens ---------------- */
+function screenIntro() {
+  var realmChips = CATEGORIES.map(function (c) {
+    return '<div class="realm-chip" style="--rc:' + c.color + '">' + icon(c.icon) +
+      '<span>' + esc(c.en) + '</span></div>';
+  }).join('');
+  return '' +
+  '<div class="screen intro-screen">' +
+    '<div class="intro-hero">' +
+      '<p class="eyebrow">ภารกิจคำวิเศษณ์ · ม.4–ม.6</p>' +
+      '<h1>ADVERB QUEST</h1>' +
+      '<p class="intro-lead">ผจญภัยผ่าน 5 แดน เพื่อพิชิตคำวิเศษณ์ภาษาอังกฤษ — เลือกคำตอบ ลากคำ แตะคำ และเรียงประโยค</p>' +
+    '</div>' +
+    '<div class="realm-chip-row">' + realmChips + '</div>' +
+    '<button class="btn btn-primary btn-lg" data-action="go-register">เริ่มผจญภัย</button>' +
+    '<p class="fine-print">5 แดน × 20 ข้อ = 100 ข้อ · แต่ละแดนสอบได้ครั้งเดียว</p>' +
+  '</div>';
+}
+
+function screenRegister() {
+  var grades = ['ม.4', 'ม.5', 'ม.6'];
+  var rooms = ['1', '2', '3', '4'];
+  return '' +
+  '<div class="screen register-screen">' +
+    '<h2>ลงทะเบียนนักผจญภัย</h2>' +
+    '<form id="reg-form" class="reg-form">' +
+      '<label>ชื่อ<input type="text" name="name" required autocomplete="off" autocapitalize="off" spellcheck="false"></label>' +
+      '<label>นามสกุล<input type="text" name="surname" required autocomplete="off" autocapitalize="off" spellcheck="false"></label>' +
+      '<div class="reg-row">' +
+        '<label>ชั้น<select name="grade" required>' + grades.map(function(g){return '<option value="'+g+'">'+g+'</option>';}).join('') + '</select></label>' +
+        '<label>ห้อง<select name="room" required>' + rooms.map(function(r){return '<option value="'+r+'">'+r+'</option>';}).join('') + '</select></label>' +
+        '<label>เลขที่<input type="number" name="number" min="1" max="50" required></label>' +
+      '</div>' +
+      '<button type="submit" class="btn btn-primary btn-lg">เข้าสู่แผนที่ผจญภัย</button>' +
+    '</form>' +
+  '</div>';
+}
+
+function realmStatusLabel(cat) {
+  var st = S.progress.stages[cat];
+  if (st.done) return 'เสร็จแล้ว · ' + st.score + '/20';
+  var answeredN = Object.keys(st.answers).length;
+  if (answeredN > 0) return 'ทำต่อ · ' + answeredN + '/20';
+  return 'ยังไม่เริ่ม';
+}
+function screenHub() {
+  var s = S.progress.student;
+  var done = allDone();
+  var cards = CATEGORIES.map(function (c) {
+    var st = S.progress.stages[c.id];
+    var stateClass = st.done ? 'realm-done' : (Object.keys(st.answers).length ? 'realm-progress' : '');
+    return '' +
+    '<button class="realm-card ' + stateClass + '" style="--rc:' + c.color + '" data-action="enter-realm" data-cat="' + c.id + '">' +
+      '<span class="realm-card-icon">' + icon(c.icon) + '</span>' +
+      '<span class="realm-card-body">' +
+        '<span class="realm-card-title">' + esc(c.en) + ' <span class="realm-card-th">' + esc(c.th) + '</span></span>' +
+        '<span class="realm-card-q">' + esc(c.q) + ' / ' + esc(c.qTh) + '</span>' +
+        '<span class="realm-card-status">' + (st.done ? icon('check') : '') + realmStatusLabel(c.id) + '</span>' +
+      '</span>' +
+    '</button>';
+  }).join('');
+  return '' +
+  '<div class="screen hub-screen">' +
+    '<div class="hub-top">' +
+      '<div>' +
+        '<p class="hub-hello">สวัสดี ' + esc(s.name) + ' ' + esc(s.surname) + ' — ' + esc(s.grade) + '/' + esc(s.room) + ' เลขที่ ' + esc(s.number) + '</p>' +
+        '<button class="link-btn" data-action="switch-student">ไม่ใช่คุณ? เปลี่ยนผู้เล่น</button>' +
+      '</div>' +
+      '<div class="hub-progress"><div class="hub-progress-fill" style="width:' + (totalAnswered()) + '%"></div></div>' +
+    '</div>' +
+    '<div class="realm-grid">' + cards + '</div>' +
+    (done ? '<button class="btn btn-primary btn-lg" data-action="show-final">ดูผลรวมทั้งหมด 🏆</button>' : '') +
+  '</div>';
+}
+
+function blankSentenceHTML(sentence, innerHTML) {
+  return esc(sentence).replace('___', '\u00a7BLANK\u00a7').replace('\u00a7BLANK\u00a7', innerHTML);
+}
+
+function questionChrome(cat, item, bodyHtml) {
+  var c = AQ.catInfo(cat);
+  var order = S.session.order[cat];
+  var n = order.length;
+  var posDots = order.map(function (id, i) {
+    var st = i < S.idx ? 'dot-done' : (i === S.idx ? 'dot-current' : '');
+    return '<span class="dot ' + st + '"></span>';
+  }).join('');
+  return '' +
+  '<div class="screen stage-screen" style="--rc:' + c.color + '">' +
+    '<div class="stage-top">' +
+      '<button class="link-btn" data-action="back-to-hub">\u2190 แผนที่</button>' +
+      '<span class="stage-title">' + icon(c.icon) + esc(c.en) + ' · ' + esc(c.q) + '</span>' +
+      '<span class="stage-count">' + (S.idx + 1) + '/' + n + '</span>' +
+    '</div>' +
+    '<div class="dot-row">' + posDots + '</div>' +
+    '<div class="q-card">' + bodyHtml + '</div>' +
+    '<div id="feedback-zone"></div>' +
+  '</div>';
+}
+
+function renderMC4Body(item) {
+  var opts = S.session.display[item.id];
+  var sentence = blankSentenceHTML(item.sentence, '<span class="blank-inline">___</span>');
+  var optsHtml = opts.map(function (o) {
+    return '<button class="opt-btn" data-action="pick-mc4" data-opt="' + esc(o) + '">' + esc(o) + '</button>';
+  }).join('');
+  return '<p class="q-sentence">' + sentence + '</p><div class="q-options">' + optsHtml + '</div>';
+}
+
+function renderDndFillBody(item) {
+  var chips = S.session.display[item.id];
+  var sentence = blankSentenceHTML(item.sentence,
+    '<span class="drop-zone" data-role="blank" data-action="tap-blank"><span class="blank-ph">___</span></span>');
+  var chipsHtml = chips.map(function (w, i) {
+    return '<div class="chip" tabindex="0" role="button" data-action="chip" data-word="' + esc(w) + '" data-chipid="c' + i + '">' + esc(w) + '</div>';
+  }).join('');
+  return '<p class="q-sentence">' + sentence + '</p>' +
+    '<div class="chip-tray" id="chip-tray">' + chipsHtml + '</div>' +
+    '<p class="hint-small">ลากคำ หรือแตะคำ เพื่อเติมลงในช่องว่าง</p>';
+}
+
+function renderClickFindBody(item) {
+  var tokens = item.sentence.split(/\s+/);
+  var toksHtml = tokens.map(function (t, i) {
+    return '<span class="word-tok" tabindex="0" role="button" data-action="click-word" data-idx="' + i + '">' + esc(t) + '</span>';
+  }).join(' ');
+  var c = AQ.catInfo(item.cat);
+  return '<p class="hint-small">แตะคำที่เป็น Adverb of ' + esc(c.en) + ' (' + esc(c.q) + ') ในประโยคนี้</p>' +
+    '<p class="q-sentence q-sentence-click">' + toksHtml + '</p>';
+}
+
+function renderDndOrderBody(item) {
+  var words = S.session.display[item.id];
+  var n = words.length;
+  // slots hold chip IDs (e.g. "c3"), never bare words — so a slot's identity never depends on
+  // word text. Two chips with the same word text (e.g. a sentence using "the" twice) stay
+  // unambiguous because each is tracked by its own chip id, not by matching word values.
+  if (!S.dndOrderState) S.dndOrderState = { slots: new Array(n).fill(null) };
+  function wordForChipId(chipId) { return words[parseInt(chipId.slice(1), 10)]; }
+  var slotsHtml = S.dndOrderState.slots.map(function (chipId, i) {
+    return '<div class="order-slot" tabindex="0" role="button" data-action="tap-slot" data-slot="' + i + '">' + (chipId ? esc(wordForChipId(chipId)) : '') + '</div>';
+  }).join('');
+  var placedSet = {};
+  S.dndOrderState.slots.forEach(function (chipId) { if (chipId) placedSet[chipId] = true; });
+  var chipsHtml = words.map(function (w, i) {
+    var chipId = 'c' + i;
+    var used = !!placedSet[chipId];
+    return '<div class="chip' + (used ? ' chip-used' : '') + '" tabindex="' + (used ? '-1' : '0') + '" role="button" data-action="chip-order" data-word="' + esc(w) + '" data-chipid="' + chipId + '">' + esc(w) + '</div>';
+  }).join('');
+  var filled = S.dndOrderState.slots.every(function (chipId) { return chipId !== null; });
+  return '<p class="hint-small">เรียงคำให้เป็นประโยคที่ถูกต้อง — ความหมาย: ' + esc(item.hintTh || '') + '</p>' +
+    '<div class="order-slots" id="order-slots">' + slotsHtml + '</div>' +
+    '<div class="chip-tray" id="chip-tray">' + chipsHtml + '</div>' +
+    '<button class="btn btn-secondary" data-action="check-order" ' + (filled ? '' : 'disabled') + '>ตรวจคำตอบ</button>';
+}
+
+function feedbackHTML(correct, item, correctDisplay) {
+  return '' +
+  '<div class="feedback ' + (correct ? 'feedback-correct' : 'feedback-wrong') + '">' +
+    '<p class="feedback-headline">' + (correct ? icon('check') + ' ถูกต้อง!' : icon('cross') + ' ยังไม่ถูก') + '</p>' +
+    (!correct ? '<p class="feedback-answer">เฉลย: <strong>' + esc(correctDisplay) + '</strong></p>' : '') +
+    '<p class="feedback-explain">' + esc(item.th) + '</p>' +
+    '<button class="btn btn-primary" data-action="next-question">ข้อถัดไป \u2192</button>' +
+  '</div>';
+}
+
+function screenStageDone(cat) {
+  var c = AQ.catInfo(cat);
+  var st = S.progress.stages[cat];
+  var order = S.session.order[cat];
+  var missed = order.map(AQ.itemById).filter(function (it) { return st.answers[it.id] === false; });
+  var missedHtml = missed.length ? missed.map(function (it) {
+    var correctDisplay = it.mech === 'dndorder' ? it.orders[0].join(' ') : it.answer;
+    return '<li><span class="miss-sentence">' + esc((it.sentence || '').replace('___', '____')) + '</span>' +
+      '<span class="miss-answer">เฉลย: ' + esc(correctDisplay) + '</span>' +
+      '<span class="miss-th">' + esc(it.th) + '</span></li>';
+  }).join('') : '<li class="miss-none">ตอบถูกทุกข้อ เยี่ยมมาก! \ud83c\udf89</li>';
+  return '' +
+  '<div class="screen stagedone-screen" style="--rc:' + c.color + '">' +
+    '<div class="stagedone-badge">' + icon(c.icon) + '</div>' +
+    '<h2>' + esc(c.en) + ' เสร็จแล้ว!</h2>' +
+    '<p class="stagedone-score">' + st.score + ' / 20</p>' +
+    (missed.length ? '<h3>ทบทวนข้อที่พลาด</h3>' : '') +
+    '<ul class="miss-list">' + missedHtml + '</ul>' +
+    '<button class="btn btn-primary btn-lg" data-action="back-to-hub">กลับไปแผนที่</button>' +
+  '</div>';
+}
+
+function screenFinal() {
+  var total = totalScore();
+  var bars = CATEGORIES.map(function (c) {
+    var st = S.progress.stages[c.id];
+    var pct = Math.round((st.score / 20) * 100);
+    return '<div class="final-bar-row">' +
+      '<span class="final-bar-label">' + icon(c.icon) + esc(c.en) + '</span>' +
+      '<div class="final-bar-track"><div class="final-bar-fill" style="width:' + pct + '%;background:' + c.color + '"></div></div>' +
+      '<span class="final-bar-score">' + st.score + '/20</span>' +
+    '</div>';
+  }).join('');
+  var allMissed = [];
+  AQ.CAT_ORDER.forEach(function (cat) {
+    var st = S.progress.stages[cat];
+    S.session.order[cat].forEach(function (id) {
+      if (st.answers[id] === false) allMissed.push(AQ.itemById(id));
+    });
+  });
+  var missedHtml = allMissed.length ? allMissed.map(function (it) {
+    var correctDisplay = it.mech === 'dndorder' ? it.orders[0].join(' ') : it.answer;
+    return '<li><span class="miss-sentence">' + esc((it.sentence || it.hintTh || '').replace('___', '____')) + '</span>' +
+      '<span class="miss-answer">เฉลย: ' + esc(correctDisplay) + '</span></li>';
+  }).join('') : '<li class="miss-none">ตอบถูกครบทั้ง 100 ข้อ \u2014 ยอดเยี่ยมที่สุด! \ud83c\udfc6</li>';
+  return '' +
+  '<div class="screen final-screen">' +
+    '<h2>สรุปผลการผจญภัย</h2>' +
+    '<p class="final-total">' + total + ' <span>/ 100</span></p>' +
+    '<div class="final-bars">' + bars + '</div>' +
+    '<p class="fine-print">ผลคะแนนนี้บันทึกไว้ในเครื่องนี้แล้ว \u2014 แคปหน้าจอส่งครูได้เลย</p>' +
+    '<h3>ทบทวนข้อที่พลาด</h3><ul class="miss-list">' + missedHtml + '</ul>' +
+    '<button class="btn btn-secondary" data-action="back-to-hub">กลับไปแผนที่</button>' +
+  '</div>';
+}
+
+function screenAdminPin() {
+  return '' +
+  '<div class="screen adminpin-screen">' +
+    '<h2>เข้าสู่ระบบครู</h2>' +
+    '<form id="admin-pin-form">' +
+      '<input type="password" inputmode="numeric" name="pin" placeholder="รหัสผ่าน" required autocomplete="off">' +
+      (S.adminPinError ? '<p class="pin-error">รหัสไม่ถูกต้อง</p>' : '') +
+      '<button type="submit" class="btn btn-primary btn-lg">เข้าสู่ระบบ</button>' +
+    '</form>' +
+  '</div>';
+}
+
+function screenAdminDash() {
+  var backendNote = AQ.backendEnabled() ?
+    '<button class="btn btn-secondary" data-action="admin-refresh">รีเฟรช</button>' :
+    '<p class="admin-offline-note">ยังไม่ได้เชื่อมต่อฐานข้อมูล (Google Apps Script) \u2014 ข้อมูลนักเรียนจะยังไม่แสดงจนกว่าจะตั้งค่า GAS_URL ที่ต้นไฟล์ index.html แล้ว deploy Code.gs ที่แนบมาด้วย ระหว่างนี้ตัวเกมยังเล่นได้ตามปกติแบบออฟไลน์</p>';
+  var rows = '';
+  if (S.adminData && S.adminData.rows) {
+    rows = S.adminData.rows.map(function (r) {
+      return '<tr><td>' + esc(r.name) + ' ' + esc(r.surname) + '</td><td>' + esc(r.grade) + '/' + esc(r.room) + ' เลขที่ ' + esc(r.number) +
+        '</td><td>' + esc(r.total) + '/100</td><td>' + esc(r.violations || 0) + '</td><td>' + esc(r.updatedAt || '') + '</td></tr>';
+    }).join('');
+  }
+  var table = (S.adminData && S.adminData.rows && S.adminData.rows.length) ?
+    '<table class="admin-table"><thead><tr><th>ชื่อ</th><th>ชั้น/ห้อง/เลขที่</th><th>คะแนนรวม</th><th>สลับหน้าจอ</th><th>อัปเดตล่าสุด</th></tr></thead><tbody>' + rows + '</tbody></table>' :
+    (AQ.backendEnabled() ? '<p class="admin-offline-note">ยังไม่มีข้อมูลนักเรียน</p>' : '');
+  return '' +
+  '<div class="screen admin-screen">' +
+    '<h2>แดชบอร์ดครู \u2014 ADVERB QUEST</h2>' +
+    backendNote +
+    table +
+  '</div>';
+}
+
+/* ---------------- Master render ---------------- */
+function render() {
+  var app = document.getElementById('app');
+  var html = '';
+  switch (S.screen) {
+    case 'intro': html = screenIntro(); break;
+    case 'register': html = screenRegister(); break;
+    case 'hub': html = screenHub(); break;
+    case 'stage': html = renderStageScreen(); break;
+    case 'stagedone': html = screenStageDone(S.cat); break;
+    case 'final': html = screenFinal(); break;
+    case 'adminpin': html = screenAdminPin(); break;
+    case 'admindash': html = screenAdminDash(); break;
+  }
+  app.innerHTML = html;
+  afterRender();
+}
+
+function renderStageScreen() {
+  var order = S.session.order[S.cat];
+  var itemId = order[S.idx];
+  var item = AQ.itemById(itemId);
+  var body;
+  if (item.mech === 'mc4') body = renderMC4Body(item);
+  else if (item.mech === 'dndfill') body = renderDndFillBody(item);
+  else if (item.mech === 'clickfind') body = renderClickFindBody(item);
+  else body = renderDndOrderBody(item);
+  var html = questionChrome(S.cat, item, body);
+  if (S.answered) {
+    var correctDisplay = item.mech === 'dndorder' ? item.orders[0].join(' ') : item.answer;
+    html = html.replace('<div id="feedback-zone"></div>', '<div id="feedback-zone">' + feedbackHTML(S.lastCorrect, item, correctDisplay) + '</div>');
+  }
+  return html;
+}
+
+/* ---------------- Post-render wiring (drag & drop needs direct element refs) ---------------- */
+function afterRender() {
+  if (S.screen !== 'stage' || S.answered) return;
+  var order = S.session.order[S.cat];
+  var item = AQ.itemById(order[S.idx]);
+  if (item.mech === 'dndfill') wireDndFill(item);
+  else if (item.mech === 'dndorder') wireDndOrder(item);
+}
+
+function wireDndFill(item) {
+  var tray = document.getElementById('chip-tray');
+  if (!tray) return;
+  Array.prototype.forEach.call(tray.querySelectorAll('.chip'), function (chipEl) {
+    AQ.attachDraggable(chipEl, {
+      findTargetAt: function (elUnder) {
+        if (!elUnder) return null;
+        var zone = elUnder.closest ? elUnder.closest('.drop-zone') : null;
+        if (zone && !zone.classList.contains('filled')) return zone;
+        return null;
+      },
+      onDropTarget: function (zone, chipEl2) { fillDndBlank(item, chipEl2.getAttribute('data-word')); },
+      onTap: function (chipEl2) { fillDndBlank(item, chipEl2.getAttribute('data-word')); },
+      onReturn: function () { render(); }
+    });
+  });
+}
+function fillDndBlank(item, word) {
+  if (S.answered) return;
+  AQ.sfxTap();
+  var correct = AQ.gradeDndFill(item, word);
+  gradeAndAdvancePrep(item, correct);
+  var zone = document.querySelector('.drop-zone');
+  if (zone) { zone.textContent = word; zone.classList.add('filled'); }
+  showFeedback(item, correct);
+}
+
+function wireDndOrder(item) {
+  var tray = document.getElementById('chip-tray');
+  if (!tray) return;
+  Array.prototype.forEach.call(tray.querySelectorAll('.chip:not(.chip-used)'), function (chipEl) {
+    AQ.attachDraggable(chipEl, {
+      findTargetAt: function (elUnder) {
+        if (!elUnder) return null;
+        var slot = elUnder.closest ? elUnder.closest('.order-slot') : null;
+        if (slot && !slot.textContent) return slot;
+        return null;
+      },
+      onDropTarget: function (slot, chipEl2) { placeChipInSlot(chipEl2, slot); },
+      onTap: function (chipEl2) { placeChipInSlot(chipEl2, findNextEmptySlot()); },
+      onReturn: function () { render(); }
+    });
+  });
+}
+function findNextEmptySlot() {
+  var slots = document.querySelectorAll('.order-slot');
+  for (var i = 0; i < slots.length; i++) if (!slots[i].textContent) return slots[i];
+  return null;
+}
+function placeChipInSlot(chipEl, slotEl) {
+  if (!slotEl || S.answered) return;
+  var chipId = chipEl.getAttribute('data-chipid');
+  var slotIdx = parseInt(slotEl.getAttribute('data-slot'), 10);
+  S.dndOrderState.slots[slotIdx] = chipId;
+  render();
+}
+
+/* ---------------- Actions ---------------- */
+function gradeAndAdvancePrep(item, correct) {
+  S.answered = true;
+  S.lastCorrect = correct;
+  var stage = S.progress.stages[S.cat];
+  stage.answers[item.id] = correct;
+  if (correct) stage.score++;
+  // Mark the stage done the instant the last answer is recorded — not on the later "next
+  // question" click. A student who sees feedback on question 20 and just closes the tab
+  // (nothing left to "advance" to, from their point of view) would otherwise leave `done`
+  // stuck false forever, which silently hides the final-results button on the hub even
+  // though every question was genuinely answered.
+  if (Object.keys(stage.answers).length >= S.session.order[S.cat].length) stage.done = true;
+  S.progress.updatedAt = Date.now();
+  AQ.saveProgress(S.progress);
+  AQ.gasCall('progress', { key: AQ.studentKeyOf(S.progress.student), student: S.progress.student, stages: S.progress.stages });
+}
+function showFeedback(item, correct) {
+  if (correct) AQ.sfxCorrect(); else AQ.sfxWrong();
+  var zone = document.getElementById('feedback-zone');
+  var correctDisplay = item.mech === 'dndorder' ? item.orders[0].join(' ') : item.answer;
+  if (zone) zone.innerHTML = feedbackHTML(correct, item, correctDisplay);
+  disableQuestionInputs();
+}
+function disableQuestionInputs() {
+  Array.prototype.forEach.call(document.querySelectorAll('.opt-btn'), function (b) { b.disabled = true; });
+  Array.prototype.forEach.call(document.querySelectorAll('.word-tok'), function (b) { b.classList.add('tok-disabled'); });
+}
+
+function pickMC4(opt) {
+  if (S.answered) return;
+  var order = S.session.order[S.cat];
+  var item = AQ.itemById(order[S.idx]);
+  var correct = AQ.gradeMC4(item, opt);
+  gradeAndAdvancePrep(item, correct);
+  Array.prototype.forEach.call(document.querySelectorAll('.opt-btn'), function (b) {
+    if (b.getAttribute('data-opt') === item.answer) b.classList.add('opt-correct');
+    else if (b.getAttribute('data-opt') === opt && !correct) b.classList.add('opt-wrong');
+  });
+  showFeedback(item, correct);
+}
+function clickWord(idx) {
+  if (S.answered) return;
+  var order = S.session.order[S.cat];
+  var item = AQ.itemById(order[S.idx]);
+  var tokens = item.sentence.split(/\s+/);
+  var targetIdx = AQ.findClickTargetIndex(item, tokens);
+  var correct = AQ.gradeClickFind(item, idx, tokens);
+  gradeAndAdvancePrep(item, correct);
+  var toks = document.querySelectorAll('.word-tok');
+  if (toks[targetIdx]) toks[targetIdx].classList.add('tok-correct');
+  if (!correct && toks[idx]) toks[idx].classList.add('tok-wrong');
+  showFeedback(item, correct);
+}
+function checkOrder() {
+  if (S.answered) return;
+  var order = S.session.order[S.cat];
+  var item = AQ.itemById(order[S.idx]);
+  var words = S.session.display[item.id];
+  var slotChipIds = S.dndOrderState.slots.slice();
+  if (slotChipIds.some(function (id) { return id === null; })) return;
+  var submittedWords = slotChipIds.map(function (chipId) { return words[parseInt(chipId.slice(1), 10)]; });
+  var correct = AQ.gradeDndOrder(item, submittedWords);
+  gradeAndAdvancePrep(item, correct);
+  showFeedback(item, correct);
+}
+function tapSlot(slotIdx) {
+  if (S.answered) return;
+  if (S.dndOrderState.slots[slotIdx] === null) return;
+  // clearing a slot only ever un-places the one chip id that was actually in it —
+  // no re-deriving "which chip is used" from word text, so a repeated word (e.g.
+  // "the" twice in one sentence) can never make the wrong chip reappear or vanish.
+  S.dndOrderState.slots[slotIdx] = null;
+  render();
+}
+
+function enterRealm(cat) {
+  S.cat = cat;
+  S.idx = nextUnansweredIdx(cat);
+  S.answered = false;
+  S.dndOrderState = null;
+  if (S.progress.stages[cat].done || S.idx >= S.session.order[cat].length) {
+    S.screen = 'stagedone';
+  } else {
+    S.screen = 'stage';
+  }
+  render();
+}
+function nextQuestion() {
+  var order = S.session.order[S.cat];
+  var stage = S.progress.stages[S.cat];
+  if (Object.keys(stage.answers).length >= order.length) {
+    stage.done = true;
+    AQ.saveProgress(S.progress);
+    AQ.gasCall('finishStage', { key: AQ.studentKeyOf(S.progress.student), student: S.progress.student, cat: S.cat, score: stage.score });
+    S.screen = 'stagedone';
+    AQ.sfxComplete();
+    render();
+    return;
+  }
+  S.idx = nextUnansweredIdx(S.cat);
+  S.answered = false;
+  S.dndOrderState = null;
+  render();
+}
+
+function startRegistration(formEl) {
+  var fd = new FormData(formEl);
+  var student = {
+    name: (fd.get('name') || '').trim(),
+    surname: (fd.get('surname') || '').trim(),
+    grade: fd.get('grade'),
+    room: fd.get('room'),
+    number: fd.get('number')
+  };
+  if (!student.name || !student.surname || !student.number) return;
+  S.progress = AQ.freshProgress(student);
+  AQ.saveProgress(S.progress);
+  S.session = AQ.buildSession(AQ.studentKeyOf(student));
+  AQ.gasCall('start', { key: AQ.studentKeyOf(student), student: student });
+  AQ.ViolationTracker.reset(0); // fresh student — do not carry over a previous player's count on a shared device
+  AQ.ViolationTracker.start();
+  S.screen = 'hub';
+  render();
+}
+function switchStudent() {
+  AQ.ViolationTracker.stop();
+  AQ.ViolationTracker.reset(0);
+  AQ.clearProgress();
+  S.progress = null; S.session = null;
+  S.screen = 'intro';
+  render();
+}
+
+function submitAdminPin(formEl) {
+  var fd = new FormData(formEl);
+  var pin = fd.get('pin');
+  if (pin === AQ.getAdminPin()) {
+    S.adminPinError = false;
+    S.screen = 'admindash';
+    loadAdminData();
+  } else {
+    S.adminPinError = true;
+  }
+  render();
+}
+function loadAdminData() {
+  if (!AQ.backendEnabled()) return;
+  AQ.gasCall('list', { pin: AQ.getAdminPin() }).then(function (res) {
+    if (res && res.ok) { S.adminData = res; render(); }
+  });
+}
+
+/* ---------------- Event delegation ---------------- */
+function onAppClick(e) {
+  var el = e.target.closest ? e.target.closest('[data-action]') : null;
+  if (!el) return;
+  var action = el.getAttribute('data-action');
+  switch (action) {
+    case 'go-register': S.screen = 'register'; render(); break;
+    case 'enter-realm': enterRealm(el.getAttribute('data-cat')); break;
+    case 'back-to-hub': S.screen = 'hub'; S.cat = null; render(); break;
+    case 'show-final': S.screen = 'final'; render(); break;
+    case 'switch-student': switchStudent(); break;
+    case 'pick-mc4': pickMC4(el.getAttribute('data-opt')); break;
+    case 'click-word': clickWord(parseInt(el.getAttribute('data-idx'), 10)); break;
+    case 'check-order': checkOrder(); break;
+    case 'tap-slot': tapSlot(parseInt(el.getAttribute('data-slot'), 10)); break;
+    case 'next-question': nextQuestion(); break;
+    case 'admin-refresh': loadAdminData(); break;
+    default: break;
+  }
+}
+function onAppKeydown(e) {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  var el = e.target.closest ? e.target.closest('[data-action]') : null;
+  if (!el) return;
+  var action = el.getAttribute('data-action');
+  if (action === 'chip' || action === 'chip-order') {
+    e.preventDefault();
+    if (el.classList.contains('chip-used') || S.answered) return;
+    var order = S.session.order[S.cat];
+    var item = AQ.itemById(order[S.idx]);
+    if (item.mech === 'dndfill') fillDndBlank(item, el.getAttribute('data-word'));
+    else if (item.mech === 'dndorder') placeChipInSlot(el, findNextEmptySlot());
+  } else if (action === 'click-word' || action === 'tap-slot') {
+    e.preventDefault();
+    el.click();
+  }
+}
+function onAppSubmit(e) {
+  var form = e.target;
+  if (form.id === 'reg-form') { e.preventDefault(); startRegistration(form); }
+  else if (form.id === 'admin-pin-form') { e.preventDefault(); submitAdminPin(form); }
+}
+
+/* ---------------- Init ---------------- */
+function init() {
+  var app = document.getElementById('app');
+  app.addEventListener('click', onAppClick);
+  app.addEventListener('submit', onAppSubmit);
+  app.addEventListener('keydown', onAppKeydown);
+  AQ.setupAntiCheat();
+  AQ.ViolationTracker.onViolation = function (reason, count) {
+    if (S.progress) { S.progress.violations = count; AQ.saveProgress(S.progress); }
+    AQ.gasCall('violation', { key: S.progress ? AQ.studentKeyOf(S.progress.student) : '', reason: reason, count: count });
+  };
+
+  var isAdmin = new URLSearchParams(window.location.search).get('admin') === '1';
+  if (isAdmin) {
+    S.screen = 'adminpin';
+    render();
+    return;
+  }
+  var saved = AQ.loadProgress();
+  if (saved && saved.student) {
+    S.progress = saved;
+    S.session = AQ.buildSession(AQ.studentKeyOf(saved.student));
+    S.screen = 'hub';
+    AQ.ViolationTracker.reset(saved.violations || 0); // continue this student's own running count, not a leftover one
+    AQ.ViolationTracker.start();
+  } else {
+    S.screen = 'intro';
+  }
+  render();
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+else init();
+
+
+})();
+
+</script>
+</body>
+</html>
