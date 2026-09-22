@@ -429,12 +429,16 @@ function itemsByCat(cat) { return ITEMS.filter(function (it) { return it.cat ===
 function itemById(id) { return ITEMS.filter(function (it) { return it.id === id; })[0]; }
 function catInfo(cat) { return CATEGORIES.filter(function (c) { return c.id === cat; })[0]; }
 
-/* Deterministic per-student session: item order per stage + shuffled options/chips/word-order.
-   Not persisted — regenerated identically from the same student key every time. */
-function buildSession(studentKey) {
-  var rng = makeRng(studentKey);
+/* Deterministic per-student, per-attempt session: item order per stage + shuffled options/chips/
+   word-order. Not persisted — regenerated identically from the same (student key, stage attempt
+   number) every time, so a mid-attempt reload keeps the same shuffle but a fresh retry (attempt
+   number incremented) gets a genuinely new one instead of repeating the same quiz verbatim.
+   attemptsByCat: { place: 1, manner: 2, ... } — defaults every stage to attempt 1 if omitted. */
+function buildSession(studentKey, attemptsByCat) {
   var session = { order: {}, display: {} };
   CAT_ORDER.forEach(function (cat) {
+    var attemptN = (attemptsByCat && attemptsByCat[cat]) || 1;
+    var rng = makeRng(studentKey + '|' + cat + '|attempt' + attemptN);
     var items = seededShuffle(itemsByCat(cat), rng);
     session.order[cat] = items.map(function (it) { return it.id; });
     items.forEach(function (it) {
@@ -479,8 +483,13 @@ function clearProgress() {
 }
 function freshProgress(student) {
   var stages = {};
-  CAT_ORDER.forEach(function (cat) { stages[cat] = { done: false, score: 0, answers: {} }; });
+  CAT_ORDER.forEach(function (cat) { stages[cat] = { done: false, score: 0, answers: {}, attempts: 0 }; });
   return { student: student, stages: stages, violations: 0, startedAt: Date.now(), updatedAt: Date.now() };
+}
+function attemptsMapFrom(progress) {
+  var m = {};
+  CAT_ORDER.forEach(function (cat) { m[cat] = (progress.stages[cat] && progress.stages[cat].attempts) || 1; });
+  return m;
 }
 function studentKeyOf(s) { return [s.name, s.surname, s.grade, s.room, s.number].join('|'); }
 
@@ -630,7 +639,7 @@ var AdverbQuestAPI = {
   normWord: normWord, gradeMC4: gradeMC4, gradeDndFill: gradeDndFill,
   gradeClickFind: gradeClickFind, findClickTargetIndex: findClickTargetIndex, gradeDndOrder: gradeDndOrder,
   loadProgress: loadProgress, saveProgress: saveProgress, clearProgress: clearProgress,
-  freshProgress: freshProgress, studentKeyOf: studentKeyOf,
+  freshProgress: freshProgress, studentKeyOf: studentKeyOf, attemptsMapFrom: attemptsMapFrom,
   backendEnabled: backendEnabled, gasCall: gasCall,
   sfxCorrect: sfxCorrect, sfxWrong: sfxWrong, sfxComplete: sfxComplete, sfxTap: sfxTap,
   ViolationTracker: ViolationTracker, setupAntiCheat: setupAntiCheat,
@@ -760,7 +769,7 @@ function screenRegister() {
 
 function realmStatusLabel(cat) {
   var st = S.progress.stages[cat];
-  if (st.done) return 'เสร็จแล้ว · ' + st.score + '/20';
+  if (st.done) return 'เสร็จแล้ว · ' + st.score + '/20' + (st.attempts > 1 ? ' · เล่นแล้ว ' + st.attempts + ' ครั้ง' : '');
   var answeredN = Object.keys(st.answers).length;
   if (answeredN > 0) return 'ทำต่อ · ' + answeredN + '/20';
   return 'ยังไม่เริ่ม';
@@ -902,9 +911,11 @@ function screenStageDone(cat) {
     '<div class="stagedone-badge">' + icon(c.icon) + '</div>' +
     '<h2>' + esc(c.en) + ' เสร็จแล้ว!</h2>' +
     '<p class="stagedone-score">' + st.score + ' / 20</p>' +
+    (st.attempts > 1 ? '<p class="fine-print">ทำไปแล้ว ' + st.attempts + ' ครั้ง (คะแนนด้านบนคือครั้งล่าสุด)</p>' : '') +
     (missed.length ? '<h3>ทบทวนข้อที่พลาด</h3>' : '') +
     '<ul class="miss-list">' + missedHtml + '</ul>' +
     '<button class="btn btn-primary btn-lg" data-action="back-to-hub">กลับไปแผนที่</button>' +
+    '<button class="btn btn-secondary btn-lg" data-action="retry-stage">ทำแดนนี้อีกครั้ง (คะแนนเดิมจะถูกแทนที่)</button>' +
   '</div>';
 }
 
@@ -945,7 +956,7 @@ function screenFinal() {
 function screenAdminPin() {
   return '' +
   '<div class="screen adminpin-screen">' +
-    '<h2>เข้าสู่ระบบครู</h2>' +
+    '<h2>ครูโอ๊ต</h2>' +
     '<form id="admin-pin-form">' +
       '<input type="password" inputmode="numeric" name="pin" placeholder="รหัสผ่าน" required autocomplete="off">' +
       (S.adminPinError ? '<p class="pin-error">รหัสไม่ถูกต้อง</p>' : '') +
@@ -962,15 +973,15 @@ function screenAdminDash() {
   if (S.adminData && S.adminData.rows) {
     rows = S.adminData.rows.map(function (r) {
       return '<tr><td>' + esc(r.name) + ' ' + esc(r.surname) + '</td><td>' + esc(r.grade) + '/' + esc(r.room) + ' เลขที่ ' + esc(r.number) +
-        '</td><td>' + esc(r.total) + '/100</td><td>' + esc(r.violations || 0) + '</td><td>' + esc(r.updatedAt || '') + '</td></tr>';
+        '</td><td>' + esc(r.total) + '/100</td><td>\ud83d\udd01\u00d7' + esc(r.attempts || 0) + '</td><td>' + esc(r.violations || 0) + '</td><td>' + esc(r.updatedAt || '') + '</td></tr>';
     }).join('');
   }
   var table = (S.adminData && S.adminData.rows && S.adminData.rows.length) ?
-    '<table class="admin-table"><thead><tr><th>ชื่อ</th><th>ชั้น/ห้อง/เลขที่</th><th>คะแนนรวม</th><th>สลับหน้าจอ</th><th>อัปเดตล่าสุด</th></tr></thead><tbody>' + rows + '</tbody></table>' :
+    '<table class="admin-table"><thead><tr><th>ชื่อ</th><th>ชั้น/ห้อง/เลขที่</th><th>คะแนนรวม</th><th>ทำไปแล้ว</th><th>สลับหน้าจอ</th><th>อัปเดตล่าสุด</th></tr></thead><tbody>' + rows + '</tbody></table>' :
     (AQ.backendEnabled() ? '<p class="admin-offline-note">ยังไม่มีข้อมูลนักเรียน</p>' : '');
   return '' +
   '<div class="screen admin-screen">' +
-    '<h2>แดชบอร์ดครู \u2014 ADVERB QUEST</h2>' +
+    '<h2>ครูโอ๊ต \u2014 ADVERB QUEST</h2>' +
     backendNote +
     table +
   '</div>';
@@ -1155,15 +1166,36 @@ function tapSlot(slotIdx) {
 
 function enterRealm(cat) {
   S.cat = cat;
+  var stage = S.progress.stages[cat];
+  if (stage.attempts === 0) { stage.attempts = 1; AQ.saveProgress(S.progress); } // first-ever entry into this realm
   S.idx = nextUnansweredIdx(cat);
   S.answered = false;
   S.dndOrderState = null;
-  if (S.progress.stages[cat].done || S.idx >= S.session.order[cat].length) {
+  if (stage.done || S.idx >= S.session.order[cat].length) {
     S.screen = 'stagedone';
   } else {
     S.screen = 'stage';
   }
   render();
+}
+function retryStage(cat) {
+  var stage = S.progress.stages[cat];
+  stage.attempts++;
+  stage.done = false;
+  stage.score = 0;
+  stage.answers = {};
+  AQ.saveProgress(S.progress);
+  // Re-derive just this stage's shuffle from the new attempt number, so a retry is a genuinely
+  // fresh run (different question order and option order) rather than the identical quiz again —
+  // the earlier attempt's answers were visible in feedback, so repeating the exact same layout
+  // would let a student "solve" the retry from memory of card positions rather than the language.
+  var freshSession = AQ.buildSession(AQ.studentKeyOf(S.progress.student), AQ.attemptsMapFrom(S.progress));
+  S.session.order[cat] = freshSession.order[cat];
+  Object.keys(freshSession.display).forEach(function (id) {
+    if (id.indexOf(cat + '-') === 0) S.session.display[id] = freshSession.display[id];
+  });
+  AQ.gasCall('progress', { key: AQ.studentKeyOf(S.progress.student), student: S.progress.student, stages: S.progress.stages });
+  enterRealm(cat);
 }
 function nextQuestion() {
   var order = S.session.order[S.cat];
@@ -1195,7 +1227,7 @@ function startRegistration(formEl) {
   if (!student.name || !student.surname || !student.number) return;
   S.progress = AQ.freshProgress(student);
   AQ.saveProgress(S.progress);
-  S.session = AQ.buildSession(AQ.studentKeyOf(student));
+  S.session = AQ.buildSession(AQ.studentKeyOf(student), AQ.attemptsMapFrom(S.progress));
   AQ.gasCall('start', { key: AQ.studentKeyOf(student), student: student });
   AQ.ViolationTracker.reset(0); // fresh student — do not carry over a previous player's count on a shared device
   AQ.ViolationTracker.start();
@@ -1239,6 +1271,7 @@ function onAppClick(e) {
     case 'go-register': S.screen = 'register'; render(); break;
     case 'enter-realm': enterRealm(el.getAttribute('data-cat')); break;
     case 'back-to-hub': S.screen = 'hub'; S.cat = null; render(); break;
+    case 'retry-stage': retryStage(S.cat); break;
     case 'show-final': S.screen = 'final'; render(); break;
     case 'switch-student': switchStudent(); break;
     case 'pick-mc4': pickMC4(el.getAttribute('data-opt')); break;
@@ -1294,7 +1327,7 @@ function init() {
   var saved = AQ.loadProgress();
   if (saved && saved.student) {
     S.progress = saved;
-    S.session = AQ.buildSession(AQ.studentKeyOf(saved.student));
+    S.session = AQ.buildSession(AQ.studentKeyOf(saved.student), AQ.attemptsMapFrom(saved));
     S.screen = 'hub';
     AQ.ViolationTracker.reset(saved.violations || 0); // continue this student's own running count, not a leftover one
     AQ.ViolationTracker.start();
